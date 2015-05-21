@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Stream awesome audio</title>
+	<style type="text/css">
+		img{
+			
+			height: 100%;
+			
+		}
+		ul{
+			list-style: none;
+			padding-bottom: 93px;
+  			display: block;
+  			margin: 0px;
+  			padding-left: 0px;
+		}
+
+		.song:hover {
+		  background: #333;
+
+		}
+		.song {
+		  background: black;
+		  border: 1px #222 solid;
+		  color:white;
+		  display:-webkit-flex;
+		  height:20px;
+		}
+		.playing-image {
+			width:10%;
+		}
+		.playing-image >img  {
+		  width:100px;
+		  position: absolute;
+		}
+		.song.playing{
+			color:#7F7;
+		}
+		.indicator{
+			width:50px;
+		}
+		#player {
+		  height: 0px;
+		  width:100%;
+		  padding-top: 90px;
+		}
+		#player-pane {
+		  position: fixed;
+		  bottom: 0;
+		  width: 100%;
+		  height: 100px;
+		  background: #222;
+		  display: -webkit-flex;
+		}
+		.indicator > img{
+			width:20px;
+			padding-left: 15px;
+			position: relative;
+			height:20px;
+		}
+		.playing-info{
+			color: white;
+			width: 90%;
+			text-align: center;;
+		}
+		body{
+			margin:0px;
+		}
+	</style>
+</head>
+<body>
+
+<script src="jspm_packages/system.js"></script>
+<script src="config.js"></script>
+<script>
+  System.import('js/main');
+</script>
+
+<div id="files"></div>
+<div id="player-pane">
+	
+</div>
+<script type="text/template" id="file-tmpl">
+<ul>
+<% _.each(files, function(file) { %> 
+    <li class="song <%= file.playing? 'playing':'' %>" data-path="<%=file.fileInfo.filePath%>">
+    	<div class="indicator">
+    		<% if(file.playing){ %>
+    			<img id="playing-image" src="/images/playing.png">
+    		<% }; %>
+    	</div>
+    	<div class="name"><%= (file.title&&file.title.trim().length!=0)?file.title:file.fileInfo.fileName %></div>
+    </li>
+<% }); %>
+</ul>
+</script>
+<script type="text/template" id="player-tmpl">
+	<div class="playing-image">
+	<img  src="<%=(playing&&file.image)?'/files/image?file='+encodeURIComponent(file.fileInfo.filePath):'/images/audio.jpg'%>"/>
+	</div>
+	<div class="playing-info">
+	<p id="playing-song"> <%=file.fileInfo?file.fileInfo.fileName:''%></p>
+	<video controls="" autoplay="" name="media" id="player">
+		<source src="<%=playing?'/play?file='+encodeURIComponent(file.fileInfo.filePath):''%>" type="audio/mpeg">
+	</video>
+	</div>
+</script>
+</body>
+</html>
